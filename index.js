@@ -6,12 +6,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 const primaryMongoUri = process.env.MONGO_URI;
 const fallbackMongoUri = process.env.LOCAL_MONGO_URI || 'mongodb://127.0.0.1:27017';
-const dbName = process.env.DB_NAME || 'weedingZoneDB';
+const dbName = process.env.DB_NAME || 'WeedingZoneDB';
 
 const mongoUri = primaryMongoUri || fallbackMongoUri;
 
 // Middleware
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*' }));
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://my-weeding-zone.vercel.app"
+  ]
+}));
+// app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*' }));
 app.use(express.json());
 
 let client;
@@ -300,11 +306,18 @@ async function start() {
     ];
     const existingProducts = await products.countDocuments();
     if (existingProducts === 0) {
-      await products.insertMany(productData);
-      console.log('Seeded products into database');
-    } else {
-      console.log(`Products collection already contains ${existingProducts} items; seed skipped.`);
+      try {
+        await products.insertMany(productData);
+      } catch (err) {
+        console.log("Seeding skipped or failed:", err.message);
+      }
     }
+    // if (existingProducts === 0) {
+    //   await products.insertMany(productData);
+    //   console.log('Seeded products into database');
+    // } else {
+    //   console.log(`Products collection already contains ${existingProducts} items; seed skipped.`);
+    // }
 
     app.get('/', (req, res) => {
       res.send('Weeding Zone Server is running');
@@ -314,7 +327,7 @@ async function start() {
       const items = await products.find({}).toArray();
       res.send(items);
     });
-      //Get Single Product by ID     
+    //Get Single Product by ID     
     app.get('/api/products/:id', async (req, res) => {
       const query = parseProductQuery(req.params.id);
       const product = await products.findOne(query);
@@ -331,7 +344,7 @@ async function start() {
       };
       const result = await products.insertOne(product);
       res.status(201).send({ ...product, _id: result.insertedId });
-    }); 
+    });
     //Update Product by ID
     app.put('/api/products/:id', async (req, res) => {
       try {
@@ -347,7 +360,7 @@ async function start() {
         res.status(500).send({ error: 'Failed to update product' });
       }
     });
-  //Delete Product by ID
+    //Delete Product by ID
     app.delete('/api/products/:id', async (req, res) => {
       const query = parseProductQuery(req.params.id);
       const result = await products.deleteOne(query);
