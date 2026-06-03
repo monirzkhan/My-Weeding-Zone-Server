@@ -14,7 +14,7 @@ const mongoUri = primaryMongoUri || fallbackMongoUri;
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://my-weeding-zone.vercel.app"
+    "https://my-wedding-zone.vercel.app"
   ]
 }));
 // app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*' }));
@@ -90,7 +90,7 @@ async function start() {
       {
         "id": 2,
         "name": " Wedding Sherwani",
-        "photoURL": "https://i.ibb.co.com/GvCKwnBH/Cream-Wedding-Sherwani.jpg",
+        "photoURL": "https://i.ibb.co.com/tTggmrjB/sherwani.jpg",
         "category": "Groom",
         "type": "Sherwani",
         "occasion": "Wedding",
@@ -102,7 +102,7 @@ async function start() {
       {
         "id": 3,
         "name": "Royal Sherwani",
-        "photoURL": "https://i.ibb.co.com/9kSDxjFV/royal-sherwani.png",
+        "photoURL": "https://i.ibb.co.com/ycPBHBZH/royal-sherwani.jpg",
         "category": "Groom",
         "type": "Sherwani",
         "occasion": "Reception",
@@ -258,7 +258,7 @@ async function start() {
       {
         "id": 18,
         "name": "Golden Embroidered Sherwani",
-        "photoURL": "https://i.ibb.co.com/ynSYwYxv/golden-abrodiary-panjabi.png",
+        "photoURL": "https://i.ibb.co.com/Kpnp8Fyx/Golden-Sherwani-1.png",
         "category": "Groom",
         "type": "Sherwani",
         "occasion": "Wedding",
